@@ -1,14 +1,15 @@
 import subprocess as sp
 from scapy.all import *
 from scapy.layers.dot11 import Dot11
-
-
+from process.process_executor import ProcessExecutor
 def get_all_interfaces(wireless_only=True):
     interfaces = []
+    pe = ProcessExecutor()
     if wireless_only:
-        output = sp.getoutput('iwconfig')
+        output = pe.run(cmd='iwconfig').stdout
     else:
-        output = sp.getoutput("ifconfig -a | sed 's/[ \t].*//;/^$/d'")
+        output = pe.run(cmd="ifconfig -a | sed 's/[ \t].*//;/^$/d'").stdout
+        
     output = output.split('\n')
     for line in output:
         if line == '\n' or line == '':
