@@ -8,10 +8,15 @@ class ProcessExecutor(object):
     def __init__(self):
         pass
 
-    def run(self, cmd, shell=True) -> ProcessExecutionResult:
+    def run(self, cmd, shell=True, raise_on_non_zero_rc=True) -> ProcessExecutionResult:
         args = shlex.split(cmd)
         p = subprocess.Popen(args, shell=shell, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
         # Careful here around deadlocks
         stdout, stderr = p.communicate()
-        return ProcessExecutionResult(p, stdout, stderr, p.returncode)
+
+        ret = ProcessExecutionResult(p, stdout, stderr, p.returncode)
+
+        if p.returncode:
+            raise ret
+        return ret
