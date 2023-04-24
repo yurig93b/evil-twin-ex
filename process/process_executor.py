@@ -1,6 +1,7 @@
 import shlex
 import subprocess
 
+from process.process_execution_error import ProcessExecutionError
 from process.process_execution_result import ProcessExecutionResult
 
 
@@ -9,14 +10,13 @@ class ProcessExecutor(object):
         pass
 
     def run(self, cmd, shell=True, raise_on_non_zero_rc=True) -> ProcessExecutionResult:
-        args = shlex.split(cmd)
-        p = subprocess.Popen(args, shell=shell, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        p = subprocess.Popen(cmd, shell=shell, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
         # Careful here around deadlocks
         stdout, stderr = p.communicate()
 
-        ret = ProcessExecutionResult(p, stdout, stderr, p.returncode)
+        per = ProcessExecutionResult(p, stdout, stderr, p.returncode)
 
-        if p.returncode:
-            raise ret
-        return ret
+        if p.returncode and raise_on_non_zero_rc:
+            raise ProcessExecutionError(per)
+        return per
