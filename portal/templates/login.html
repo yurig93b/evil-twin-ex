@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/css/loginpage.css" />
+
+    <title>Please Log In</title>
+</head>
+<body>
+
+    <h1>International Bank</h1>
+    <form method="post">
+        <!-- Headings for the form -->
+        <div class="headingsContainer">
+            <h3>Sign in</h3>
+            <p>Sign in with your bank username and password to proceed</p>
+        </div>
+
+        <!-- Main container for all inputs -->
+        <div class="mainContainer">
+            <!-- Username -->
+            <label>Your username</label>
+            <input type="text" placeholder="Enter Username" name="username" value="{{ request.form['username'] }}">
+            </input>
+
+            <br><br>
+
+            <!-- Password -->
+            <label>Your password</label>
+            <input type="password" placeholder="Enter Password" name="password" value="{{ request.form['password'] }}">
+
+
+
+            <!-- Submit button -->
+            <button type="submit">Login</button>
+
+
+        </div>
+
+    </form>
+</body>
+</html>
