@@ -1,11 +1,10 @@
 import subprocess as sp
 from scapy.all import *
-from scapy.layers.dot11 import Dot11, Dot11Elt, Dot11Beacon
+from scapy.layers.dot11 import Dot11, Dot11Beacon
 
 network_list = []
 
 
-# list:<string> of interfaces
 def get_all_interfaces(wireless_only=True):
     interfaces = []
     if wireless_only:
