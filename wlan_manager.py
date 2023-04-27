@@ -98,7 +98,7 @@ class WlanManager(object):
         sniff(iface=interface, prn=handle_packet, timeout=timeout)
         return endpoints_addrs
 
-    def scan_for_aps(self, interface, get_open_aps_only=True, timeout=DEFAULT_TIMEOUT_SECS_SCAN):
+    def scan_for_aps(self, interface, get_open_aps_only=True, timeout_per_channel=DEFAULT_TIMEOUT_SECS_SCAN):
         ap_list = {}  # {<ssid>: <AccessPointInfo>}
         self.set_monitor(interface)
 
@@ -117,6 +117,7 @@ class WlanManager(object):
 
         for c in self._rc.attacked_channels:
             self.set_channel(interface, c)
-            sniff(iface=interface, prn=handle_packet, timeout=timeout)
+            print(timeout_per_channel)
+            sniff(iface=interface, prn=handle_packet, timeout=timeout_per_channel)
 
         return ap_list

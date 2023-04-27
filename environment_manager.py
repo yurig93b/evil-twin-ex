@@ -67,7 +67,7 @@ class EnvironmentManager(object):
 
         print("Configuring interfaces...")
         self._wl.set_monitor(self._rc.monitor_wlan_interface)
-        self._wl.set_channel(self._rc.monitor_wlan_interface, self._rc.attacked_ap.channel)
+        self._wl.set_channel(self._rc.monitor_wlan_interface, self._rc.target_ap.channel)
 
         print("Configuring iptables and packet forwarding")
         self.configure_iptables_and_forwarding(self._rc.gateway_interface, self._rc.ap_wlan_interface)
@@ -80,11 +80,11 @@ class EnvironmentManager(object):
 
         print("Configuring hostapd")
         self._hostapdm.configure(interface=self._rc.ap_wlan_interface,
-                                 channel=self._rc.attacked_ap.channel,
-                                 ssid=self._rc.attacked_ap.ssid)
+                                 channel=self._rc.target_ap.channel,
+                                 ssid=self._rc.target_ap.ssid)
 
     def start_services(self):
-        self._rc.validate()
+        self._rc.validate_all()
         print("Restarting dnsmasq")
         self._dnsmasq_manager.restart()
 

@@ -18,6 +18,7 @@ class ProcessExecutor(object):
 
         if p.returncode and raise_on_non_zero_rc:
             if print_err:
+                print("Error in cmd '{}'".format(cmd))
                 print(stdout)
                 print(stderr)
             raise ProcessExecutionError(per)

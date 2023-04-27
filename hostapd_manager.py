@@ -45,3 +45,8 @@ channel={channel}
     def stop(self):
         if self._running_proc and self._running_proc.is_alive():
             self._running_proc.terminate()
+
+        try:
+            self._pe.run("pkill -9 hostapd", print_err=False)
+        except:
+            pass

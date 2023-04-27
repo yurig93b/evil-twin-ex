@@ -12,7 +12,7 @@ DEFAULT_ROUTER_DHCP_END = '192.168.168.100'
 DEFAULT_SUPPORTED_CHANNELS = [1, 6, 11]  # range(1,14)
 
 _org = {'ap_wlan_interface': 'wlxc83a35c2e034',
-        'attacked_ap': {'bssid': '64:64:4a:86:25:6a',
+        'target_ap': {'bssid': '64:64:4a:86:25:6a',
                         'channel': 6,
                         'crypto': list[{'OPN'}],
                         'raw_stats': {'channel': 6,
@@ -48,15 +48,16 @@ class RuntimeConfig:
     ap_wlan_interface: str = None  # "wlxc83a35c2e034"
     monitor_wlan_interface: str = None  # "wlxc83a35c2fcb0"
     gateway_interface: str = None  # "ens33"
-    attacked_ap: AccessPointInfo = None  # dataclasses.field(default_factory=lambda:  AccessPointInfo(**_org['attacked_ap']))
+    target_ap: AccessPointInfo = None  # dataclasses.field(default_factory=lambda:  AccessPointInfo(**_org['target_ap']))
     attacked_endpoint: str = None  # '28:ea:2d:c6:27:f3'
     attacked_channels: list = dataclasses.field(default_factory=lambda: DEFAULT_SUPPORTED_CHANNELS)
+    total_scan_time: int = 60
     dhcp_range_start: str = DEFAULT_ROUTER_DHCP_START
     dhcp_range_end: str = DEFAULT_ROUTER_DHCP_END
     router_ip: str = DEFAULT_ROUTER_IP
     router_mask: str = DEFAULT_ROUTER_MASK
 
-    def validate(self):
+    def validate_all(self):
         for f, v in self.__dict__.items():
             if not v:
                 raise RuntimeError(

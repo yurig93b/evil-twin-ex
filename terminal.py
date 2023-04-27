@@ -6,6 +6,7 @@ from consolemenu.items import *
 
 from ap_info import AccessPointInfo
 from attack import Attack
+from defense import Defence
 from environment_manager import EnvironmentManager
 from hostapd_manager import HostapdManager
 from interface_manager import InterfaceManager
@@ -47,13 +48,14 @@ class TargetSelectMenu(ConsoleMenuWithErrorHalt):
         if not self._rc.monitor_wlan_interface:
             raise RuntimeError("No interface selected...")
 
-        if not self._rc.attacked_ap:
+        if not self._rc.target_ap:
             raise RuntimeError("No AP selected...")
 
-        print("Scanning endpoints...")
+        print(f"Scanning endpoints for {self._rc.total_scan_time} seconds...")
 
-        for bssid in self._wl.scan_for_endpoint_of_ap(self._rc.monitor_wlan_interface, self._rc.attacked_ap.channel,
-                                                      self._rc.attacked_ap.bssid):
+        for bssid in self._wl.scan_for_endpoint_of_ap(self._rc.monitor_wlan_interface, self._rc.target_ap.channel,
+                                                      self._rc.target_ap.bssid,
+                                                      timeout=self._rc.total_scan_time):
             self.append_item(
                 FunctionItemWithErrorHalt(bssid, self._update_selected_target, [bssid], should_exit=True))
 
@@ -69,17 +71,18 @@ class APSelectMenu(ConsoleMenuWithErrorHalt):
         self._wl = wl
 
     def _update_selected_ap(self, ap: AccessPointInfo):
-        self._rc.attacked_ap = ap
+        self._rc.target_ap = ap
 
     def _start(self, show_exit_option=None):
         if not self._rc.monitor_wlan_interface:
             raise RuntimeError("No interface selected...")
 
-        print("Scanning networks...")
+        print(f"Scanning networks for {self._rc.total_scan_time} seconds...")
 
         self.items = []
 
-        for k, v in self._wl.scan_for_aps(self._rc.monitor_wlan_interface).items():
+        for k, v in self._wl.scan_for_aps(self._rc.monitor_wlan_interface,
+                                          timeout_per_channel=(self._rc.total_scan_time * 1.0 / len(self._rc.attacked_channels))).items():
             if not k:
                 continue
             self.append_item(
@@ -108,6 +111,7 @@ class Terminal(object):
                                       PortalManager(self._pe), self._wl)
 
         self._attack = Attack(self._rc_config, self._wl, self._im)
+        self._defense = Defence(self._rc_config, self._wl, self._im)
 
         self._menu = ConsoleMenu("Evil Twin Attack Terminal", "Yuri Grigorian / Ben Gendler")
         self._menu_interfaces_targerts_main = ConsoleMenu("Select interfaces and targets")
@@ -115,9 +119,9 @@ class Terminal(object):
         self._menu_interfaces_monitor = ConsoleMenu("Select Monitor interface")
         self._menu_interfaces_gateway = ConsoleMenu("Select Gateway interface")
 
-        self._mene_attack_aps = APSelectMenu(wl=self._wl, rc=self._rc_config, title="Select AP to attack")
+        self._mene_attack_aps = APSelectMenu(wl=self._wl, rc=self._rc_config, title="Select AP to attack/protect")
         self._mene_attack_endpoints = TargetSelectMenu(wl=self._wl, rc=self._rc_config,
-                                                       title="Select endpoint to attack")
+                                                       title="Select endpoint to attack/protect")
 
         self._populate_interfaces_menus()
 
@@ -143,7 +147,7 @@ class Terminal(object):
 
     def _go_for_attack(self):
         try:
-            self._rc_config.validate()
+            self._rc_config.validate_all()
             self._ec.stop_services()
             self._ec.configure()
             self._ec.start_services()
@@ -155,11 +159,21 @@ class Terminal(object):
         input("Endpoint connected to us. Press return to shutdown and exit.")
         exit(0)
 
+    def _go_for_defence(self):
+        try:
+            self._defense.start_defence()
+        except BaseException as e:
+            print("Something went wrong with starting the defence. Please make sure all is configured well and restart.")
+            traceback.print_exc()
+            exit(1)
+        exit(0)
+
     def show(self):
         item_svc_validation = FunctionItemWithErrorHalt("Perform service validations", self._sm.validate, [])
         item_pkgs_install = FunctionItemWithErrorHalt("Perform package installations", self._ec.install_pkgs, [])
         item_rc_config = FunctionItemWithErrorHalt("Show runtime config", self._rc_config.show_config, [])
         item_go_attack = FunctionItemWithErrorHalt("Launch Attack", self._go_for_attack, [])
+        item_go_defense = FunctionItemWithErrorHalt("Launch Defense", self._go_for_defence, [])
 
         # Create the menu
 
@@ -171,7 +185,7 @@ class Terminal(object):
             SubmenuItem("Select Gateway interface", self._menu_interfaces_gateway, self._menu))
 
         self._menu_interfaces_targerts_main.append_item(
-            SubmenuItem("Select AP to attack", self._mene_attack_aps, self._menu))
+            SubmenuItem("Select AP to attack/protect", self._mene_attack_aps, self._menu))
 
         self._menu_interfaces_targerts_main.append_item(
             SubmenuItem("Select endpoint to attack", self._mene_attack_endpoints, self._menu))
@@ -182,6 +196,7 @@ class Terminal(object):
         self._menu.append_item(submenu_item)
         self._menu.append_item(item_rc_config)
         self._menu.append_item(item_go_attack)
+        self._menu.append_item(item_go_defense)
 
         # Finally, we call show to show the menu and allow the user to interact
         self._menu.start(show_exit_option=False)
