@@ -83,7 +83,7 @@ It will then sniff clients talking to that fake AP and send disassociation packe
 A third card is recommended.
 * Note that our solution protects only 1 AP for POC purposes.
 Multi AP protection can be solved by scanning all BSSIDs with the target SSID and going by them, attacking any new BSSID that tries 
-to also the same SSID. 
+to also use the same SSID. 
 1. Run `sh run.sh`
 2. Go to 3 and configure monitor interface and a target AP.
 3. Run 6 from main menu. A proper output:  
