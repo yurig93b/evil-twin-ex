@@ -56,7 +56,7 @@ Our solution opens a fake portal on port 80 and a DNS server that hijacks all re
 In a loop:  
 After selecting an AP to protect the system will start scanning for new APs with the same SSID. 
 It will then sniff clients talking to that fake AP and send disassociation packets to them specifically.
-
+* A different approach would be to send a broadcast(`ff:ff:ff:ff:ff:ff`) disassociation packet to all endpoints from that fake AP.
 ***
 
 ### Clearing Before Running
