@@ -9,7 +9,7 @@ class ProcessExecutor(object):
     def __init__(self):
         pass
 
-    def run(self, cmd, shell=True, raise_on_non_zero_rc=True) -> ProcessExecutionResult:
+    def run(self, cmd, shell=True, raise_on_non_zero_rc=True, print_err=True) -> ProcessExecutionResult:
         p = subprocess.Popen(cmd, shell=shell, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
         # Careful here around deadlocks
@@ -18,5 +18,8 @@ class ProcessExecutor(object):
         per = ProcessExecutionResult(p, stdout, stderr, p.returncode)
 
         if p.returncode and raise_on_non_zero_rc:
+            if print_err:
+                print(stdout)
+                print(stderr)
             raise ProcessExecutionError(per)
         return per

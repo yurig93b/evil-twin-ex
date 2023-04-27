@@ -5,3 +5,4 @@ Jinja2==3.1.2
 MarkupSafe==2.1.2
 scapy==2.5.0
 Werkzeug==2.2.3
+console-menu==0.8.0
