@@ -3,7 +3,23 @@
 This repo contains an exercise implementation to perform an evil twin attack on open networks.
 It also includes a defence mechanism to mitigate such attacks.
 
+
 ![img.png](imgs/img.png)
+
+- [Evil Twin Attack](#evil-twin-attack)
+    + [Requirements](#requirements)
+    + [Installing Apt Dependencies](#installing-apt-dependencies)
+    + [Creating The Python Virtualenv And Installing Dependencies](#creating-the-python-virtualenv-and-installing-dependencies)
+    + [Caveats due to driver issues](#caveats-due-to-driver-issues)
+    + [Attack Mechanism Explanation](#attack-mechanism-explanation)
+        - [DNS Hijacking](#dns-hijacking)
+    + [Defence Mechanism Explanation](#defence-mechanism-explanation)
+    + [Clearing Before Running](#clearing-before-running)
+    + [Running Attack](#running-attack)
+    + [Running Defence](#running-defence)
+
+<small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
+
 
 ### Requirements
 1. OS: `Ubuntu 22.04LTS / Kali Linux`
@@ -39,7 +55,9 @@ In a loop:
 After selecting an AP to protect the system will start scanning for new APs with the same SSID. 
 It will then sniff clients talking to that fake AP and send disassociation packets to them specifically.
 
-### Clearing
+***
+
+### Clearing Before Running
 1. Please run `sh clear.sh` before starting working.
 
 ### Running Attack
