@@ -62,7 +62,7 @@ It will then sniff clients talking to that fake AP and send disassociation packe
 
 ### Running Attack
 1. Run `sh run.sh`
-2. Go to 3 and configure all interfaces, target AP and endpoint. Gateway device is the one you use to talk to the internet.
+2. Go to 3 and configure all interfaces, target AP and endpoint. Gateway device is the one you use to talk to the internet.  
 ![img_1.png](imgs/img_1.png)  
 ![img_2.png](imgs/img_2.png)  
 ![img_3.png](imgs/img_3.png)  
