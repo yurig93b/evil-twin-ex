@@ -1,6 +1,6 @@
 # Evil Twin Attack
 
-#### Yuri Grigorian / Benny Gendler
+#### Yuri Grigorian / Ben Gendler
 
 This repo contains an exercise implementation to perform an evil twin attack on open networks.
 It also includes a defence mechanism to mitigate such attacks.
