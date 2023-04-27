@@ -109,7 +109,7 @@ class Terminal(object):
 
         self._attack = Attack(self._rc_config, self._wl, self._im)
 
-        self._menu = ConsoleMenu("Evil Twin Attack Terminal", "Yuri Grigorian / Ben")
+        self._menu = ConsoleMenu("Evil Twin Attack Terminal", "Yuri Grigorian / Ben Gendler")
         self._menu_interfaces_targerts_main = ConsoleMenu("Select interfaces and targets")
         self._menu_interfaces_ap = ConsoleMenu("Select AP interface")
         self._menu_interfaces_monitor = ConsoleMenu("Select Monitor interface")
