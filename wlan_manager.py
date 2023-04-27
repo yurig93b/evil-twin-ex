@@ -116,8 +116,8 @@ class WlanManager(object):
                                                              raw_stats=stats)
 
         for c in self._rc.attacked_channels:
+            print(f"Switching to channel {c}")
             self.set_channel(interface, c)
-            print(timeout_per_channel)
             sniff(iface=interface, prn=handle_packet, timeout=timeout_per_channel)
 
         return ap_list

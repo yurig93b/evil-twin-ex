@@ -9,7 +9,7 @@ DEFAULT_ROUTER_DHCP_START = '192.168.168.10'
 DEFAULT_ROUTER_DHCP_END = '192.168.168.100'
 
 # Generally we would need to scan all channels but our device/driver stops responding after some switches
-DEFAULT_SUPPORTED_CHANNELS = [1, 6, 11]  # range(1,14)
+DEFAULT_SUPPORTED_CHANNELS = range(1,14)
 
 _org = {'ap_wlan_interface': 'wlxc83a35c2e034',
         'target_ap': {'bssid': '64:64:4a:86:25:6a',
@@ -74,7 +74,7 @@ class RuntimeConfig:
         import pprint
 
         data = {k: v for k, v in self.__dict__.items()}
-        data['attacked_ap'] = data['attacked_ap'].to_dict() if data['attacked_ap'] else None
+        data['target_ap'] = data['target_ap'].to_dict() if data['target_ap'] else None
         pprint.pprint(data)
 
         if wait:
