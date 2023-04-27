@@ -17,7 +17,8 @@ class InterfaceManager(object):
             self._pe.run("ifconfig {} up".format(interface))
 
     def get_interface_addr(self, interface):
-        return self._pe.run(f"ip -brief link | grep {interface} | tr -s ' ' | cut -d' ' -f 3").stdout.decode().replace('\n','')
+        return self._pe.run(f"ip -brief link | grep {interface} | tr -s ' ' | cut -d' ' -f 3").stdout.decode().replace(
+            '\n', '')
 
     def is_wlan_interface_in_monitor(self, interface):
         try:

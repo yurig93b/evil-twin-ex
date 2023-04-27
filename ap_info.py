@@ -1,7 +1,7 @@
+import copy
 import typing
 from dataclasses import dataclass
-from typing import Union
-import copy
+
 
 @dataclass
 class AccessPointInfo:

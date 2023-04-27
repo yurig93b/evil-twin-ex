@@ -8,6 +8,7 @@ from terminal import Terminal
 def is_root():
     return os.geteuid() == 0
 
+
 def main():
     if not is_root():
         print("Please run as root...")

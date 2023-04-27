@@ -1,11 +1,11 @@
 from process.process_execution_error import ProcessExecutionError
-from process.process_execution_result import ProcessExecutionResult
 from process.process_executor import ProcessExecutor
+
 
 class ServiceManager(object):
     DEFAULT_NEEDED_SERVICES = ['dnsmasq']
 
-    def __init__(self, pe : ProcessExecutor):
+    def __init__(self, pe: ProcessExecutor):
         self._pe = pe
 
     def validate(self):
@@ -38,12 +38,8 @@ class ServiceManager(object):
         except ProcessExecutionError:
             return False
 
-    def restart_service(self, service_name: str) -> bool:
-        try:
-            self._pe.run("service {} restart".format(service_name))
-            return True
-        except ProcessExecutionError:
-            return False
+    def restart_service(self, service_name: str):
+        self._pe.run("service {} restart".format(service_name))
 
     def is_service_exists(self, service_name: str) -> bool:
         try:

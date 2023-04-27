@@ -1,7 +1,8 @@
+from multiprocessing import Process
+
 from interface_manager import InterfaceManager
 from process.process_executor import ProcessExecutor
 from service_manager import ServiceManager
-from multiprocessing import Process
 
 
 class HostapdManager(object):
@@ -17,7 +18,7 @@ class HostapdManager(object):
 
     def configure(self, interface, channel, ssid, conf_path=DEFAULT_CONF_PATH):
         data = \
-f'''interface={interface}
+            f'''interface={interface}
 driver=nl80211
 ssid={ssid}
 hw_mode=g
@@ -37,7 +38,8 @@ channel={channel}
         if not self._config_path:
             raise RuntimeError("Hostapd is not configured.")
 
-        self._running_proc = Process(target=self._pe.run, args=(f'hostapd -dd > /var/log/hostapd.log {self._config_path}',), daemon=True)
+        self._running_proc = Process(target=self._pe.run,
+                                     args=(f'hostapd -dd > /var/log/hostapd.log {self._config_path}',), daemon=True)
         self._running_proc.start()
 
     def stop(self):

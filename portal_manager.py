@@ -1,7 +1,6 @@
 from multiprocessing import Process
 from typing import Union
 
-from portal import portal
 from process.process_executor import ProcessExecutor
 
 
@@ -24,5 +23,3 @@ class PortalManager(object):
     def stop(self):
         if self._proc and self._proc.is_alive():
             self._proc.terminate()
-
-

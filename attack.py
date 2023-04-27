@@ -1,6 +1,6 @@
 import time
-from multiprocessing import Process
 from multiprocessing import Event
+from multiprocessing import Process
 
 from interface_manager import InterfaceManager
 from runtime_config import RuntimeConfig
@@ -22,8 +22,6 @@ class Attack(object):
             time.sleep(1)
         print("Endpoint connected to us!")
 
-
-
     def start_attack(self):
         self._rc.validate()
         should_exit_event = Event()
@@ -32,7 +30,8 @@ class Attack(object):
                                       args=(self._rc.monitor_wlan_interface,
                                             self._rc.attacked_ap.channel,
                                             self._rc.attacked_endpoint,
-                                            self._im.get_interface_addr(self._rc.ap_wlan_interface), should_exit_event, endpoint_connected_event),
+                                            self._im.get_interface_addr(self._rc.ap_wlan_interface), should_exit_event,
+                                            endpoint_connected_event),
                                       daemon=True)
 
         p_wait_for_endpoint.start()

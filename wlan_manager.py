@@ -1,5 +1,3 @@
-from threading import Event
-
 from scapy.all import *
 from scapy.layers.dot11 import Dot11, Dot11Beacon, RadioTap, Dot11Deauth
 
@@ -59,6 +57,7 @@ class WlanManager(object):
         self.set_channel(interface, channel)
 
         print("Waiting to {} to talk to {}".format(endpoint_bssid, ap_bssid))
+
         def handle_packet(pkt):
             # pkt.show()
             if Dot11 in pkt and pkt[Dot11].addr2 == endpoint_bssid:
@@ -75,7 +74,7 @@ class WlanManager(object):
                         and pkt[Dot11].addr1 == ap_bssid \
                         and pkt[Dot11].addr2 == endpoint_bssid:
                     endpoint_seen_event.set()
-                    print("Seen our target connect to us!")
+                    # print("Seen our target connect to us!")
                     return True
 
             return False

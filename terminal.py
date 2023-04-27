@@ -1,5 +1,4 @@
 # Import the necessary packages
-import time
 import traceback
 
 from consolemenu import *
@@ -16,6 +15,7 @@ from runtime_config import RuntimeConfig
 from service_manager import ServiceManager
 from wlan_manager import WlanManager
 
+
 class ConsoleMenuWithErrorHalt(ConsoleMenu):
     def _start(self, show_exit_option=None):
         raise NotImplementedError()
@@ -28,6 +28,7 @@ class ConsoleMenuWithErrorHalt(ConsoleMenu):
         except BaseException as e:
             print(e)
             input("Press return to continue...")
+
 
 class TargetSelectMenu(ConsoleMenuWithErrorHalt):
 
@@ -51,11 +52,11 @@ class TargetSelectMenu(ConsoleMenuWithErrorHalt):
 
         print("Scanning endpoints...")
 
-
         for bssid in self._wl.scan_for_endpoint_of_ap(self._rc.monitor_wlan_interface, self._rc.attacked_ap.channel,
                                                       self._rc.attacked_ap.bssid):
             self.append_item(
                 FunctionItemWithErrorHalt(bssid, self._update_selected_target, [bssid], should_exit=True))
+
 
 class APSelectMenu(ConsoleMenuWithErrorHalt):
 
@@ -83,6 +84,7 @@ class APSelectMenu(ConsoleMenuWithErrorHalt):
                 continue
             self.append_item(
                 FunctionItemWithErrorHalt(f'{k} => {v.bssid}', self._update_selected_ap, [v], should_exit=True))
+
 
 class FunctionItemWithErrorHalt(FunctionItem):
     def action(self):
@@ -130,7 +132,8 @@ class Terminal(object):
 
     def _populate_interfaces_menus(self):
         for i in self._im.get_interfaces(wireless_only=True):
-            self._menu_interfaces_ap.append_item(FunctionItemWithErrorHalt(i, self._update_ap_interface, [i], should_exit=True))
+            self._menu_interfaces_ap.append_item(
+                FunctionItemWithErrorHalt(i, self._update_ap_interface, [i], should_exit=True))
             self._menu_interfaces_monitor.append_item(
                 FunctionItemWithErrorHalt(i, self._update_monitor_interface, [i], should_exit=True))
 
@@ -149,7 +152,7 @@ class Terminal(object):
             print("Something went wrong with starting the attack. Please make sure all is configured well and restart.")
             traceback.print_exc()
             exit(1)
-        input("Client connected to us. Press return to shutdown and exit.")
+        input("Endpoint connected to us. Press return to shutdown and exit.")
         exit(0)
 
     def show(self):

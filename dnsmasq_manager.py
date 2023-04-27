@@ -9,11 +9,10 @@ class DnsMasqManager(object):
 
     def configure(self, interface: str, gateway_ip: str, dhcp_range_start: str, dhcp_range_end: str,
                   hijack_dns=True, out_path=DEFAULT_CONF_PATH):
-
         hijacking_data = f'address=/#/{gateway_ip}' if hijack_dns else ''
 
         data = \
-        f'''
+            f'''
         interface={interface}
         bind-interfaces
         {hijacking_data}
